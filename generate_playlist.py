@@ -4,14 +4,9 @@ import pytz
 
 # --- CONFIG ---
 DATA_URL = "https://raw.githubusercontent.com/ahmedstore75/Iptvbdlive/refs/heads/main/mixiptvchannel.m3u"
-PHP_PROXY = "http://xown.site/token/stream.php"
+PHP_PROXY = "https://saiptvlive.ahmed-bd-org.workers.dev"
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-}
-
-# TARGET CATEGORY IDS / NAMES (যদি ক্যাটাগরি ফিল্টার করতে চান)
-TARGET_CATEGORY_IDS = {
-    "1715", "1716", "1718", "1732", "1735", "1736", "1737", "1531", "1356"
 }
 
 # --- 1️⃣ Generate new 32-char token ---
@@ -41,7 +36,7 @@ def fetch_m3u_data():
                 current_ch = {}
                 # Extract group-title (Category)
                 group_match = re.search(r'group-title="([^"]*)"', line)
-                cat_id = group_match.group(1) if group_match else "Uncategorized"
+                cat_name = group_match.group(1) if group_match else "Uncategorized"
                 
                 # Extract tvg-logo
                 logo_match = re.search(r'tvg-logo="([^"]*)"', line)
@@ -50,8 +45,7 @@ def fetch_m3u_data():
                 # Extract Channel Name
                 name = line.split(",")[-1].strip() if "," in line else "Unknown"
                 
-                current_ch["category_id"] = cat_id
-                current_ch["category_name"] = cat_id
+                current_ch["category_name"] = cat_name if cat_name else "Uncategorized"
                 current_ch["name"] = name
                 current_ch["stream_icon"] = logo
                 
@@ -81,7 +75,7 @@ def generate_playlist(channels, token):
     bd_time = datetime.now(bd_tz).strftime('%Y-%m-%d %H:%M:%S')
     
     channels_by_category = {}
-    selected_count = 0
+    total_count = 0
     skipped_channels = 0
     
     for ch in channels:
@@ -89,41 +83,27 @@ def generate_playlist(channels, token):
             skipped_channels += 1
             continue
             
-        cat_id = str(ch.get("category_id", ""))
-        category_name = ch.get("category_name", "General")
+        category_name = ch.get("category_name", "Uncategorized")
+        name = ch.get("name")
+        stream_id = ch.get("stream_id")
         
-        # Check target category or fallback
-        if (TARGET_CATEGORY_IDS and cat_id in TARGET_CATEGORY_IDS) or not TARGET_CATEGORY_IDS:
-            name = ch.get("name")
-            stream_id = ch.get("stream_id")
+        if not name or not stream_id:
+            skipped_channels += 1
+            continue
             
-            if not name or not stream_id:
-                skipped_channels += 1
-                continue
-                
-            if category_name not in channels_by_category:
-                channels_by_category[category_name] = []
-            
-            channels_by_category[category_name].append(ch)
-            selected_count += 1
-            
-    # যদি M3U এর ক্যাটাগরি আইডিগুলোর সাথে আইডি না মিলে, তবে সব চ্যানেলাই প্লেলিস্টে যোগ করবে
-    if selected_count == 0 and channels:
-        print("⚠️ TARGET_CATEGORY_IDS match not found. Including all M3U categories...")
-        for ch in channels:
-            cat_name = ch.get("category_name", "General")
-            if cat_name not in channels_by_category:
-                channels_by_category[cat_name] = []
-            channels_by_category[cat_name].append(ch)
-            selected_count += 1
+        if category_name not in channels_by_category:
+            channels_by_category[category_name] = []
+        
+        channels_by_category[category_name].append(ch)
+        total_count += 1
     
-    print(f"📊 Processed {len(channels)} channels, selected {selected_count}, skipped {skipped_channels}")
+    print(f"📊 Processed {len(channels)} channels, total added: {total_count}, skipped: {skipped_channels}")
     
     lines = [
         "#EXTM3U",
-        "# 📦 filoox-bdix Auto Playlist (Selected Categories)",
+        "# 📦 filoox-bdix Auto Playlist",
         f"# ⏰ BD Updated time: {bd_time}",
-        f"# 🔄 Updated hourly — Total channels: {selected_count}",
+        f"# 🔄 Updated hourly — Total channels: {total_count}",
         f"# 📊 Skipped invalid: {skipped_channels}",
         "# 🔁 Each stream link uses token validation",
         "# 🌐 @ Credit: @sultanarabi161"
@@ -153,7 +133,7 @@ def generate_playlist(channels, token):
     with open("playlist.m3u", "w", encoding="utf-8") as f:
         f.write("\n".join(lines))
     
-    return selected_count
+    return total_count
 
 # --- MAIN ---
 if __name__ == "__main__":
