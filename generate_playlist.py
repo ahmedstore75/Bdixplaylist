@@ -83,9 +83,9 @@ def generate_playlist(channels, token):
             skipped_channels += 1
             continue
             
-        # চ্যানেলের নাম অনুযায়ী সংক্ষিপ্ত সুন্দর আইডি তৈরি
+        # চ্যানেলের নাম + .m3u8 যুক্ত করে লিংক তৈরি
         ch_slug = get_channel_slug(extinf, idx)
-        stream_url = f"{PHP_PROXY}?id={urllib.parse.quote(ch_slug)}&token={token}"
+        stream_url = f"{PHP_PROXY}?id={urllib.parse.quote(ch_slug)}.m3u8&token={token}"
         
         lines.append(extinf)
         lines.append(stream_url)
