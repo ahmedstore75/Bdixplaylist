@@ -5,6 +5,10 @@ on:
     - cron: '0 * * * *'   # Every 1 hour
   workflow_dispatch:
 
+# Git Push অনুমতির জন্য
+permissions:
+  contents: write
+
 jobs:
   auto-update:
     runs-on: ubuntu-latest
@@ -22,8 +26,6 @@ jobs:
       run: pip install -r requirements.txt
 
     - name: Generate new token and playlist
-      env:
-        XOTT_API_URL: ${{ secrets.XOTT_API_URL }}
       run: python generate_playlist.py
 
     - name: Commit and push updates
