@@ -17,7 +17,7 @@ def generate_token():
         json.dump({"token": token, "generated_at": timestamp}, f, indent=2)
     return token
 
-# --- 2️⃣ Download and Parse M3U Data ---
+# --- 2️⃣ Download and Parse M3U Data in exact order ---
 def fetch_m3u_data():
     try:
         res = requests.get(DATA_URL, headers=HEADERS, timeout=15)
@@ -59,67 +59,50 @@ def fetch_m3u_data():
         print("❌ Error downloading M3U data:", e)
         return []
 
-# --- 3️⃣ Generate organized playlist ---
+# --- 3️⃣ Generate playlist maintaining exact order ---
 def generate_playlist(channels, token):
     bd_tz = pytz.timezone('Asia/Dhaka')
     bd_time = datetime.now(bd_tz).strftime('%Y-%m-%d %H:%M:%S')
     
-    channels_by_category = {}
     total_count = 0
     skipped_channels = 0
-    
-    for ch in channels:
-        if not ch or not isinstance(ch, dict):
-            skipped_channels += 1
-            continue
-            
-        category_name = ch.get("category_name", "Uncategorized")
-        name = ch.get("name")
-        
-        if not name or name == "Unknown":
-            skipped_channels += 1
-            continue
-            
-        if category_name not in channels_by_category:
-            channels_by_category[category_name] = []
-        
-        channels_by_category[category_name].append(ch)
-        total_count += 1
-    
-    print(f"📊 Processed {len(channels)} channels, total added: {total_count}, skipped: {skipped_channels}")
     
     lines = [
         "#EXTM3U",
         "# 📦 filoox-bdix Auto Playlist",
         f"# ⏰ BD Updated time: {bd_time}",
-        f"# 🔄 Updated hourly — Total channels: {total_count}",
-        f"# 📊 Skipped invalid: {skipped_channels}",
-        "# 🔁 Each stream link uses token validation",
         "# 🌐 @ Credit: @sultanarabi161"
     ]
     
+    # Intro Video
     lines.extend([
         '#EXTINF:-1 tvg-id="" tvg-name="📺 Welcome" tvg-logo="https://filexo.vercel.app/image/sultanarabi161.jpg" group-title="Intro",📺 Welcome',
         'https://filexo.vercel.app/video/credit_developed_by_sultanarabi161.mp4'
     ])
     
-    for category_name, category_channels in sorted(channels_by_category.items()):
-        lines.append(f"# 🟢 {category_name} ({len(category_channels)} channels)")
+    # Process channels sequentially without reordering
+    for ch in channels:
+        if not ch or not isinstance(ch, dict):
+            skipped_channels += 1
+            continue
+            
+        name = str(ch.get("name", "Unknown")).strip()
+        logo = str(ch.get("stream_icon", "")).strip()
+        category_name = str(ch.get("category_name", "Uncategorized")).strip()
         
-        for ch in category_channels:
-            name = str(ch.get("name", "Unknown")).strip()
-            logo = str(ch.get("stream_icon", "")).strip()
+        if not name or name == "Unknown":
+            skipped_channels += 1
+            continue
             
-            if not name or name == "Unknown":
-                continue
-                
-            # চ্যানেলের নাম ইউআরএল-এনকোড করে বসানো
-            encoded_name = urllib.parse.quote(name)
-            stream_url = f"{PHP_PROXY}?id={encoded_name}&token={token}"
-            
-            extinf_line = f'#EXTINF:-1 tvg-id="" tvg-name="{name}" tvg-logo="{logo}" group-title="{category_name}",{name}'
-            lines.append(extinf_line)
-            lines.append(stream_url)
+        encoded_name = urllib.parse.quote(name)
+        stream_url = f"{PHP_PROXY}?id={encoded_name}&token={token}"
+        
+        extinf_line = f'#EXTINF:-1 tvg-id="" tvg-name="{name}" tvg-logo="{logo}" group-title="{category_name}",{name}'
+        lines.append(extinf_line)
+        lines.append(stream_url)
+        total_count += 1
+    
+    print(f"📊 Processed {len(channels)} channels, total added: {total_count}, skipped: {skipped_channels}")
     
     with open("playlist.m3u", "w", encoding="utf-8") as f:
         f.write("\n".join(lines))
@@ -128,7 +111,7 @@ def generate_playlist(channels, token):
 
 # --- MAIN ---
 if __name__ == "__main__":
-    print("🔄 Starting playlist generation from M3U link...")
+    print("🔄 Starting playlist generation in exact sequence...")
     
     try:
         new_token = generate_token()
@@ -144,7 +127,7 @@ if __name__ == "__main__":
         
         total_channels = generate_playlist(channels, new_token)
         
-        print(f"✅ Playlist generated with {total_channels} channels")
+        print(f"✅ Playlist generated with {total_channels} channels in exact sequence")
         print("🎯 Token & playlist updated successfully")
         
     except Exception as e:
