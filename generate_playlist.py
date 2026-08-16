@@ -4,7 +4,7 @@ import pytz
 
 # --- CONFIG ---
 DATA_URL = "https://raw.githubusercontent.com/ahmedstore75/Iptvbdlive/refs/heads/main/mixiptvchannel.m3u"
-PHP_PROXY = "https://iptvlive.ahmed-bd-org.workers.dev/"
+PHP_PROXY = "https://iptvlive.ahmed-bd-org.workers.dev"  # আপনার ক্লাউডফ্লেয়ার ডোমেইন
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 }
@@ -46,6 +46,16 @@ def fetch_m3u_data():
         print("❌ Error downloading M3U data:", e)
         return []
 
+# --- Helper: Create Clean Channel Slug ---
+def get_channel_slug(extinf, index):
+    try:
+        name = extinf.split(",")[-1].strip() if "," in extinf else f"Channel_{index}"
+        clean_name = re.sub(r'[^\w\s\u0980-\u09FF-]', '', name)
+        slug = re.sub(r'\s+', '_', clean_name.strip())
+        return slug if slug else f"ch_{index}"
+    except:
+        return f"ch_{index}"
+
 # --- 3️⃣ Generate playlist ---
 def generate_playlist(channels, token):
     bd_tz = pytz.timezone('Asia/Dhaka')
@@ -54,7 +64,6 @@ def generate_playlist(channels, token):
     total_count = 0
     skipped_channels = 0
     
-    # আপনার কাস্টম হেডার ফরম্যাট
     lines = [
         "#EXTM3U",
         "# 📦 iptvlive Auto Playlist",
@@ -62,7 +71,7 @@ def generate_playlist(channels, token):
         "# 🌐 @ Credit: @ahmedstore75"
     ]
     
-    for ch in channels:
+    for idx, ch in enumerate(channels, 1):
         if not ch or not isinstance(ch, dict):
             skipped_channels += 1
             continue
@@ -74,8 +83,9 @@ def generate_playlist(channels, token):
             skipped_channels += 1
             continue
             
-        encoded_raw_url = urllib.parse.quote(raw_url, safe='')
-        stream_url = f"{PHP_PROXY}?id={encoded_raw_url}&token={token}"
+        # চ্যানেলের নাম অনুযায়ী সংক্ষিপ্ত সুন্দর আইডি তৈরি
+        ch_slug = get_channel_slug(extinf, idx)
+        stream_url = f"{PHP_PROXY}?id={urllib.parse.quote(ch_slug)}&token={token}"
         
         lines.append(extinf)
         lines.append(stream_url)
