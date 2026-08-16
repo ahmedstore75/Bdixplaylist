@@ -1,4 +1,4 @@
-import os, json, random, string, requests, re
+import os, json, random, string, requests, re, urllib.parse
 from datetime import datetime
 import pytz
 
@@ -50,16 +50,6 @@ def fetch_m3u_data():
                 current_ch["stream_icon"] = logo
                 
             elif not line.startswith("#") and current_ch:
-                # Extract stream_id from URL or use URL directly
-                stream_id = line
-                id_match = re.search(r'[?&]id=([^&]+)', line)
-                if id_match:
-                    stream_id = id_match.group(1)
-                elif line.startswith("http"):
-                    parts = line.rstrip('/').split('/')
-                    stream_id = parts[-1] if parts else line
-                
-                current_ch["stream_id"] = stream_id
                 current_ch["raw_url"] = line
                 channels.append(current_ch)
                 current_ch = {}
@@ -85,9 +75,8 @@ def generate_playlist(channels, token):
             
         category_name = ch.get("category_name", "Uncategorized")
         name = ch.get("name")
-        stream_id = ch.get("stream_id")
         
-        if not name or not stream_id:
+        if not name or name == "Unknown":
             skipped_channels += 1
             continue
             
@@ -120,12 +109,14 @@ def generate_playlist(channels, token):
         for ch in category_channels:
             name = str(ch.get("name", "Unknown")).strip()
             logo = str(ch.get("stream_icon", "")).strip()
-            stream_id = ch.get("stream_id")
             
-            if not name or name == "Unknown" or not stream_id:
+            if not name or name == "Unknown":
                 continue
                 
-            stream_url = f"{PHP_PROXY}?id={stream_id}&token={token}"
+            # চ্যানেলের নাম ইউআরএল-এনকোড করে বসানো
+            encoded_name = urllib.parse.quote(name)
+            stream_url = f"{PHP_PROXY}?id={encoded_name}&token={token}"
+            
             extinf_line = f'#EXTINF:-1 tvg-id="" tvg-name="{name}" tvg-logo="{logo}" group-title="{category_name}",{name}'
             lines.append(extinf_line)
             lines.append(stream_url)
