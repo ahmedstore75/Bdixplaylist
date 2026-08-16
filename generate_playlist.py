@@ -1,5 +1,5 @@
 # --- CONFIG ---
-DATA_URL = "https://sm-monirul.top/api/app/info/channel_data.json"
+DATA_URL = "https://raw.githubusercontent.com/ahmedstore75/Iptvbdlive/refs/heads/main/mixiptvchannel.m3u"
 PHP_PROXY = "http://xown.site/token/stream.php"
 
 # ব্রাউজার User-Agent (যাতে সার্ভার ব্লক না করে)
