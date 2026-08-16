@@ -1,34 +1,181 @@
+import os, json, random, string, requests, re
+from datetime import datetime
+import pytz
+
 # --- CONFIG ---
 DATA_URL = "https://raw.githubusercontent.com/ahmedstore75/Iptvbdlive/refs/heads/main/mixiptvchannel.m3u"
 PHP_PROXY = "http://xown.site/token/stream.php"
-
-# ব্রাউজার User-Agent (যাতে সার্ভার ব্লক না করে)
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 }
 
-# --- 2️⃣ Download JSON Data directly from URL ---
-def fetch_json_data():
+# TARGET CATEGORY IDS / NAMES (যদি ক্যাটাগরি ফিল্টার করতে চান)
+TARGET_CATEGORY_IDS = {
+    "1715", "1716", "1718", "1732", "1735", "1736", "1737", "1531", "1356"
+}
+
+# --- 1️⃣ Generate new 32-char token ---
+def generate_token():
+    token = ''.join(random.choices(string.ascii_letters + string.digits, k=32))
+    timestamp = int(datetime.now().timestamp())
+    with open("token.json", "w") as f:
+        json.dump({"token": token, "generated_at": timestamp}, f, indent=2)
+    return token
+
+# --- 2️⃣ Download and Parse M3U Data ---
+def fetch_m3u_data():
     try:
-        res = requests.get(DATA_URL, headers=HEADERS, timeout=15, verify=False)
-        print(f"📡 HTTP Response Status: {res.status_code}")
-        
+        res = requests.get(DATA_URL, headers=HEADERS, timeout=15)
         res.raise_for_status()
-        data = res.json()
+        lines = res.text.splitlines()
         
-        categories = []
         channels = []
+        current_ch = {}
         
-        if isinstance(data, dict):
-            categories = data.get("categories") or data.get("category") or []
-            channels = data.get("channels") or data.get("streams") or data.get("live_streams") or data.get("data") or []
-        elif isinstance(data, list):
-            channels = data
+        for line in lines:
+            line = line.strip()
+            if not line:
+                continue
             
-        return categories, channels
+            if line.startswith("#EXTINF:"):
+                current_ch = {}
+                # Extract group-title (Category)
+                group_match = re.search(r'group-title="([^"]*)"', line)
+                cat_id = group_match.group(1) if group_match else "Uncategorized"
+                
+                # Extract tvg-logo
+                logo_match = re.search(r'tvg-logo="([^"]*)"', line)
+                logo = logo_match.group(1) if logo_match else ""
+                
+                # Extract Channel Name
+                name = line.split(",")[-1].strip() if "," in line else "Unknown"
+                
+                current_ch["category_id"] = cat_id
+                current_ch["category_name"] = cat_id
+                current_ch["name"] = name
+                current_ch["stream_icon"] = logo
+                
+            elif not line.startswith("#") and current_ch:
+                # Extract stream_id from URL or use URL directly
+                stream_id = line
+                id_match = re.search(r'[?&]id=([^&]+)', line)
+                if id_match:
+                    stream_id = id_match.group(1)
+                elif line.startswith("http"):
+                    parts = line.rstrip('/').split('/')
+                    stream_id = parts[-1] if parts else line
+                
+                current_ch["stream_id"] = stream_id
+                current_ch["raw_url"] = line
+                channels.append(current_ch)
+                current_ch = {}
+                
+        return channels
     except Exception as e:
-        print("❌ Error downloading JSON data:", e)
-        # সার্ভার কী রেসপন্স পাঠাচ্ছে তা দেখার জন্য
-        if 'res' in locals():
-            print("📄 Server Response Content:", res.text[:300])
-        return [], []
+        print("❌ Error downloading M3U data:", e)
+        return []
+
+# --- 3️⃣ Generate organized playlist ---
+def generate_playlist(channels, token):
+    bd_tz = pytz.timezone('Asia/Dhaka')
+    bd_time = datetime.now(bd_tz).strftime('%Y-%m-%d %H:%M:%S')
+    
+    channels_by_category = {}
+    selected_count = 0
+    skipped_channels = 0
+    
+    for ch in channels:
+        if not ch or not isinstance(ch, dict):
+            skipped_channels += 1
+            continue
+            
+        cat_id = str(ch.get("category_id", ""))
+        category_name = ch.get("category_name", "General")
+        
+        # Check target category or fallback
+        if (TARGET_CATEGORY_IDS and cat_id in TARGET_CATEGORY_IDS) or not TARGET_CATEGORY_IDS:
+            name = ch.get("name")
+            stream_id = ch.get("stream_id")
+            
+            if not name or not stream_id:
+                skipped_channels += 1
+                continue
+                
+            if category_name not in channels_by_category:
+                channels_by_category[category_name] = []
+            
+            channels_by_category[category_name].append(ch)
+            selected_count += 1
+            
+    # যদি M3U এর ক্যাটাগরি আইডিগুলোর সাথে আইডি না মিলে, তবে সব চ্যানেলাই প্লেলিস্টে যোগ করবে
+    if selected_count == 0 and channels:
+        print("⚠️ TARGET_CATEGORY_IDS match not found. Including all M3U categories...")
+        for ch in channels:
+            cat_name = ch.get("category_name", "General")
+            if cat_name not in channels_by_category:
+                channels_by_category[cat_name] = []
+            channels_by_category[cat_name].append(ch)
+            selected_count += 1
+    
+    print(f"📊 Processed {len(channels)} channels, selected {selected_count}, skipped {skipped_channels}")
+    
+    lines = [
+        "#EXTM3U",
+        "# 📦 filoox-bdix Auto Playlist (Selected Categories)",
+        f"# ⏰ BD Updated time: {bd_time}",
+        f"# 🔄 Updated hourly — Total channels: {selected_count}",
+        f"# 📊 Skipped invalid: {skipped_channels}",
+        "# 🔁 Each stream link uses token validation",
+        "# 🌐 @ Credit: @sultanarabi161"
+    ]
+    
+    lines.extend([
+        '#EXTINF:-1 tvg-id="" tvg-name="📺 Welcome" tvg-logo="https://filexo.vercel.app/image/sultanarabi161.jpg" group-title="Intro",📺 Welcome',
+        'https://filexo.vercel.app/video/credit_developed_by_sultanarabi161.mp4'
+    ])
+    
+    for category_name, category_channels in sorted(channels_by_category.items()):
+        lines.append(f"# 🟢 {category_name} ({len(category_channels)} channels)")
+        
+        for ch in category_channels:
+            name = str(ch.get("name", "Unknown")).strip()
+            logo = str(ch.get("stream_icon", "")).strip()
+            stream_id = ch.get("stream_id")
+            
+            if not name or name == "Unknown" or not stream_id:
+                continue
+                
+            stream_url = f"{PHP_PROXY}?id={stream_id}&token={token}"
+            extinf_line = f'#EXTINF:-1 tvg-id="" tvg-name="{name}" tvg-logo="{logo}" group-title="{category_name}",{name}'
+            lines.append(extinf_line)
+            lines.append(stream_url)
+    
+    with open("playlist.m3u", "w", encoding="utf-8") as f:
+        f.write("\n".join(lines))
+    
+    return selected_count
+
+# --- MAIN ---
+if __name__ == "__main__":
+    print("🔄 Starting playlist generation from M3U link...")
+    
+    try:
+        new_token = generate_token()
+        print("✅ Token generated")
+        
+        channels = fetch_m3u_data()
+        
+        if not channels:
+            print("❌ No channels fetched from M3U link")
+            exit(1)
+            
+        print(f"📊 Parsed {len(channels)} channels from M3U")
+        
+        total_channels = generate_playlist(channels, new_token)
+        
+        print(f"✅ Playlist generated with {total_channels} channels")
+        print("🎯 Token & playlist updated successfully")
+        
+    except Exception as e:
+        print(f"❌ Critical error: {e}")
+        exit(1)
