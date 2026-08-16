@@ -4,7 +4,7 @@ import pytz
 
 # --- CONFIG ---
 DATA_URL = "https://raw.githubusercontent.com/ahmedstore75/Iptvbdlive/refs/heads/main/mixiptvchannel.m3u"
-PHP_PROXY = "https://iptvlive.ahmed-bd-org.workers.dev"
+PHP_PROXY = "https://iptvlive.ahmed-bd-org.workers.dev/"
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 }
@@ -54,11 +54,12 @@ def generate_playlist(channels, token):
     total_count = 0
     skipped_channels = 0
     
+    # আপনার কাস্টম হেডার ফরম্যাট
     lines = [
         "#EXTM3U",
-        "# 📦 filoox-bdix Auto Playlist",
+        "# 📦 iptvlive Auto Playlist",
         f"# ⏰ BD Updated time: {bd_time}",
-        "# 🌐 @ Credit: @sultanarabi161"
+        "# 🌐 @ Credit: @ahmedstore75"
     ]
     
     for ch in channels:
