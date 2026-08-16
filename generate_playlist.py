@@ -1,4 +1,4 @@
-import os, json, random, string, requests, re, urllib.parse
+import os, json, random, string, requests, re
 from datetime import datetime
 import pytz
 
@@ -34,12 +34,15 @@ def fetch_m3u_data():
             
             if line.startswith("#EXTINF:"):
                 current_ch = {}
+                # Extract group-title (Category)
                 group_match = re.search(r'group-title="([^"]*)"', line)
                 cat_name = group_match.group(1) if group_match else "Uncategorized"
                 
+                # Extract tvg-logo
                 logo_match = re.search(r'tvg-logo="([^"]*)"', line)
                 logo = logo_match.group(1) if logo_match else ""
                 
+                # Extract Channel Name
                 name = line.split(",")[-1].strip() if "," in line else "Unknown"
                 
                 current_ch["category_name"] = cat_name if cat_name else "Uncategorized"
@@ -47,6 +50,16 @@ def fetch_m3u_data():
                 current_ch["stream_icon"] = logo
                 
             elif not line.startswith("#") and current_ch:
+                # Extract Stream ID from URL
+                stream_id = line
+                id_match = re.search(r'[?&]id=([^&]+)', line)
+                if id_match:
+                    stream_id = id_match.group(1)
+                elif line.startswith("http"):
+                    parts = line.rstrip('/').split('/')
+                    stream_id = parts[-1] if parts else line
+                
+                current_ch["stream_id"] = stream_id
                 current_ch["raw_url"] = line
                 channels.append(current_ch)
                 current_ch = {}
@@ -56,7 +69,7 @@ def fetch_m3u_data():
         print("❌ Error downloading M3U data:", e)
         return []
 
-# --- 3️⃣ Generate playlist ---
+# --- 3️⃣ Generate playlist with valid Stream ID ---
 def generate_playlist(channels, token):
     bd_tz = pytz.timezone('Asia/Dhaka')
     bd_time = datetime.now(bd_tz).strftime('%Y-%m-%d %H:%M:%S')
@@ -85,15 +98,14 @@ def generate_playlist(channels, token):
         name = str(ch.get("name", "Unknown")).strip()
         logo = str(ch.get("stream_icon", "")).strip()
         category_name = str(ch.get("category_name", "Uncategorized")).strip()
-        raw_url = ch.get("raw_url", "").strip()
+        stream_id = ch.get("stream_id")
         
-        if not name or name == "Unknown" or not raw_url:
+        if not name or name == "Unknown" or not stream_id:
             skipped_channels += 1
             continue
             
-        # মূল লিঙ্কটি এনকোড করে প্রক্সিতে পাস করা
-        encoded_raw_url = urllib.parse.quote(raw_url, safe='')
-        stream_url = f"{PHP_PROXY}?id={encoded_raw_url}&token={token}"
+        # Vercel ব্যাকএন্ডের জন্য সঠিক stream_id ব্যবহার করা হয়েছে
+        stream_url = f"{PHP_PROXY}?id={stream_id}&token={token}"
         
         extinf_line = f'#EXTINF:-1 tvg-id="" tvg-name="{name}" tvg-logo="{logo}" group-title="{category_name}",{name}'
         lines.append(extinf_line)
