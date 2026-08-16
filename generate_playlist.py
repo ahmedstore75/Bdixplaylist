@@ -9,15 +9,15 @@ HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 }
 
-# --- 1️⃣ Generate new 32-char token ---
+# --- 1️⃣ Generate new 8-char short token ---
 def generate_token():
-    token = ''.join(random.choices(string.ascii_letters + string.digits, k=32))
+    token = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
     timestamp = int(datetime.now().timestamp())
     with open("token.json", "w") as f:
         json.dump({"token": token, "generated_at": timestamp}, f, indent=2)
     return token
 
-# --- 2️⃣ Download and Parse M3U Data (Preserving Original Metadata) ---
+# --- 2️⃣ Download and Parse M3U Data ---
 def fetch_m3u_data():
     try:
         res = requests.get(DATA_URL, headers=HEADERS, timeout=15)
@@ -46,7 +46,7 @@ def fetch_m3u_data():
         print("❌ Error downloading M3U data:", e)
         return []
 
-# --- 3️⃣ Generate playlist with exact original formatting ---
+# --- 3️⃣ Generate playlist ---
 def generate_playlist(channels, token):
     bd_tz = pytz.timezone('Asia/Dhaka')
     bd_time = datetime.now(bd_tz).strftime('%Y-%m-%d %H:%M:%S')
@@ -61,12 +61,6 @@ def generate_playlist(channels, token):
         "# 🌐 @ Credit: @sultanarabi161"
     ]
     
-    # Intro Video
-    lines.extend([
-        '#EXTINF:-1 tvg-id="" tvg-name="📺 Welcome" tvg-logo="https://filexo.vercel.app/image/sultanarabi161.jpg" group-title="Intro",📺 Welcome',
-        'https://filexo.vercel.app/video/credit_developed_by_sultanarabi161.mp4'
-    ])
-    
     for ch in channels:
         if not ch or not isinstance(ch, dict):
             skipped_channels += 1
@@ -79,11 +73,9 @@ def generate_playlist(channels, token):
             skipped_channels += 1
             continue
             
-        # মূল লিঙ্কটি এনকোড করে Vercel প্রক্সিতে পাস করা
         encoded_raw_url = urllib.parse.quote(raw_url, safe='')
         stream_url = f"{PHP_PROXY}?id={encoded_raw_url}&token={token}"
         
-        # মূল ফাইলের সম্পূর্ণ #EXTINF হেডার এবং প্রক্সি লিঙ্ক যোগ করা
         lines.append(extinf)
         lines.append(stream_url)
         total_count += 1
@@ -101,7 +93,7 @@ if __name__ == "__main__":
     
     try:
         new_token = generate_token()
-        print("✅ Token generated")
+        print(f"✅ Short token generated: {new_token}")
         
         channels = fetch_m3u_data()
         
