@@ -4,7 +4,7 @@ import pytz
 
 # --- CONFIG ---
 DATA_URL = "https://raw.githubusercontent.com/ahmedstore75/Iptvbdlive/refs/heads/main/mixiptvchannel.m3u"
-PHP_PROXY = "https://iptvlive-beta.vercel.app"
+PHP_PROXY = "https://iptvlive.ahmed-bd-org.workers.dev"
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 }
