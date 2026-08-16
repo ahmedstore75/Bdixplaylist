@@ -1,4 +1,4 @@
-import os, json, random, string, requests, re, urllib.parse
+import os, json, random, string, requests, re
 from datetime import datetime
 import pytz
 
@@ -17,7 +17,7 @@ def generate_token():
         json.dump({"token": token, "generated_at": timestamp}, f, indent=2)
     return token
 
-# --- 2️⃣ Download and Parse M3U Data in exact order ---
+# --- 2️⃣ Download and Parse M3U Data ---
 def fetch_m3u_data():
     try:
         res = requests.get(DATA_URL, headers=HEADERS, timeout=15)
@@ -50,6 +50,16 @@ def fetch_m3u_data():
                 current_ch["stream_icon"] = logo
                 
             elif not line.startswith("#") and current_ch:
+                # Extract Stream ID from URL
+                stream_id = line
+                id_match = re.search(r'[?&]id=([^&]+)', line)
+                if id_match:
+                    stream_id = id_match.group(1)
+                elif line.startswith("http"):
+                    parts = line.rstrip('/').split('/')
+                    stream_id = parts[-1] if parts else line
+                
+                current_ch["stream_id"] = stream_id
                 current_ch["raw_url"] = line
                 channels.append(current_ch)
                 current_ch = {}
@@ -59,7 +69,7 @@ def fetch_m3u_data():
         print("❌ Error downloading M3U data:", e)
         return []
 
-# --- 3️⃣ Generate playlist maintaining exact order ---
+# --- 3️⃣ Generate playlist with valid Stream ID ---
 def generate_playlist(channels, token):
     bd_tz = pytz.timezone('Asia/Dhaka')
     bd_time = datetime.now(bd_tz).strftime('%Y-%m-%d %H:%M:%S')
@@ -80,7 +90,6 @@ def generate_playlist(channels, token):
         'https://filexo.vercel.app/video/credit_developed_by_sultanarabi161.mp4'
     ])
     
-    # Process channels sequentially without reordering
     for ch in channels:
         if not ch or not isinstance(ch, dict):
             skipped_channels += 1
@@ -89,13 +98,14 @@ def generate_playlist(channels, token):
         name = str(ch.get("name", "Unknown")).strip()
         logo = str(ch.get("stream_icon", "")).strip()
         category_name = str(ch.get("category_name", "Uncategorized")).strip()
+        stream_id = ch.get("stream_id")
         
-        if not name or name == "Unknown":
+        if not name or name == "Unknown" or not stream_id:
             skipped_channels += 1
             continue
             
-        encoded_name = urllib.parse.quote(name)
-        stream_url = f"{PHP_PROXY}?id={encoded_name}&token={token}"
+        # Vercel ব্যাকএন্ডের জন্য সঠিক stream_id ব্যবহার করা হয়েছে
+        stream_url = f"{PHP_PROXY}?id={stream_id}&token={token}"
         
         extinf_line = f'#EXTINF:-1 tvg-id="" tvg-name="{name}" tvg-logo="{logo}" group-title="{category_name}",{name}'
         lines.append(extinf_line)
@@ -111,7 +121,7 @@ def generate_playlist(channels, token):
 
 # --- MAIN ---
 if __name__ == "__main__":
-    print("🔄 Starting playlist generation in exact sequence...")
+    print("🔄 Starting playlist generation...")
     
     try:
         new_token = generate_token()
@@ -127,7 +137,7 @@ if __name__ == "__main__":
         
         total_channels = generate_playlist(channels, new_token)
         
-        print(f"✅ Playlist generated with {total_channels} channels in exact sequence")
+        print(f"✅ Playlist generated with {total_channels} channels")
         print("🎯 Token & playlist updated successfully")
         
     except Exception as e:
