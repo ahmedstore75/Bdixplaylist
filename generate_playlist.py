@@ -1,5 +1,4 @@
 import re
-import urllib.parse
 import urllib.request
 from datetime import datetime, timezone, timedelta
 
@@ -10,7 +9,18 @@ HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 }
 
-# --- 1️⃣ Download and Parse M3U Data ---
+# --- Helper: Create Clean Channel Slug ---
+def get_channel_slug(extinf, index):
+    try:
+        name = extinf.split(",")[-1].strip() if "," in extinf else f"Channel_{index}"
+        clean_name = re.sub(r'[^\w\s\u0980-\u09FF-]', '', name)
+        # স্পেস ও আন্ডারস্কোর সরিয়ে হাইফেন (-) বসানো
+        slug = re.sub(r'[\s_]+', '-', clean_name.strip()).lower()
+        return slug if slug else f"ch-{index}"
+    except Exception:
+        return f"ch-{index}"
+
+# --- Download and Parse M3U Data ---
 def fetch_m3u_data():
     try:
         req = urllib.request.Request(DATA_URL, headers=HEADERS)
@@ -40,19 +50,8 @@ def fetch_m3u_data():
         print("❌ Error downloading M3U data:", e)
         return []
 
-# --- Helper: Create Clean Channel Slug ---
-def get_channel_slug(extinf, index):
-    try:
-        name = extinf.split(",")[-1].strip() if "," in extinf else f"Channel_{index}"
-        clean_name = re.sub(r'[^\w\s\u0980-\u09FF-]', '', name)
-        slug = re.sub(r'\s+', '_', clean_name.strip())
-        return slug if slug else f"ch_{index}"
-    except Exception:
-        return f"ch_{index}"
-
-# --- 2️⃣ Generate playlist ---
+# --- Generate playlist ---
 def generate_playlist(channels):
-    # বাংলাদেশ সময় (UTC+6)
     bd_tz = timezone(timedelta(hours=6))
     bd_time = datetime.now(bd_tz).strftime('%Y-%m-%d %H:%M:%S')
     
@@ -78,9 +77,9 @@ def generate_playlist(channels):
             skipped_channels += 1
             continue
             
-        # টোকেন ছাড়া কেবল আইডি দিয়ে লিংক তৈরি
         ch_slug = get_channel_slug(extinf, idx)
-        stream_url = f"{PHP_PROXY}?id={urllib.parse.quote(ch_slug)}.m3u8"
+        # কাঙ্ক্ষিত URL স্ট্রাকচার তৈরি: /channel-slug/index.m3u8
+        stream_url = f"{PHP_PROXY}/{ch_slug}/index.m3u8"
         
         lines.append(extinf)
         lines.append(stream_url)
@@ -93,24 +92,17 @@ def generate_playlist(channels):
     
     return total_count
 
-# --- MAIN ---
 if __name__ == "__main__":
     print("🔄 Starting playlist generation...")
-    
     try:
         channels = fetch_m3u_data()
-        
         if not channels:
             print("❌ No channels fetched from M3U link")
             exit(1)
             
         print(f"📊 Parsed {len(channels)} channels from M3U")
-        
         total_channels = generate_playlist(channels)
-        
         print(f"✅ Playlist generated with {total_channels} channels")
-        print("🎯 Playlist updated successfully without tokens")
-        
     except Exception as e:
         print(f"❌ Critical error: {e}")
         exit(1)
