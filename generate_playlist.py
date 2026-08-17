@@ -19,7 +19,7 @@ def get_channel_slug(extinf, index):
     except Exception:
         return f"ch-{index}"
 
-# --- Download and Parse M3U Data Sequentially ---
+# --- Download and Parse M3U Data Exact Structure ---
 def fetch_m3u_data():
     try:
         req = urllib.request.Request(DATA_URL, headers=HEADERS)
@@ -36,10 +36,12 @@ def fetch_m3u_data():
                 continue
             
             if line_str.startswith("#"):
+                # রুট #EXTM3U স্কিপ করে বাকি সব ট্যাগ/মেটাডেটা জমা রাখা
                 if line_str.startswith("#EXTM3U"):
                     continue
                 current_meta.append(line_str)
             else:
+                # আসল স্ট্রিমিং URL পাওয়ার পর মেটাডেটা ব্লক সহ সংরক্ষণ
                 if current_meta:
                     channels.append({
                         "meta_lines": current_meta,
@@ -52,7 +54,7 @@ def fetch_m3u_data():
         print("❌ Error downloading M3U data:", e)
         return []
 
-# --- Generate Playlist with Strict Serial Ordering ---
+# --- Generate Playlist (Preserving Exact Meta Lines) ---
 def generate_playlist(channels):
     bd_tz = timezone(timedelta(hours=6))
     bd_time = datetime.now(bd_tz).strftime('%Y-%m-%d %H:%M:%S')
@@ -63,7 +65,6 @@ def generate_playlist(channels):
         f"# ⏰ Updated: {bd_time}"
     ]
     
-    # ১ থেকে শুরু করে সিরিয়াল অনুযায়ী সাজানো
     for idx, ch in enumerate(channels, 1):
         meta_lines = ch.get("meta_lines", [])
         raw_url = ch.get("raw_url", "")
@@ -71,17 +72,18 @@ def generate_playlist(channels):
         if not meta_lines or not raw_url:
             continue
         
+        # স্লাগ তৈরির জন্য #EXTINF লাইনটি খুঁজে নেওয়া
         extinf_line = next((m for m in meta_lines if m.startswith("#EXTINF:")), "")
         ch_slug = get_channel_slug(extinf_line, idx)
+        stream_url = f"{PHP_PROXY}/{ch_slug}/index.m3u8"
         
-        # সিরিয়াল নম্বর সহ URL তৈরি (যেমন: /1-jamuna-tv/index.m3u8)
-        stream_url = f"{PHP_PROXY}/{idx}-{ch_slug}/index.m3u8"
-        
+        # মেইন ফাইলের হুবহু সমস্ত মেটাডেটা ট্যাগ যুক্ত করা
         lines.extend(meta_lines)
+        # নতুন Worker Stream URL যুক্ত করা
         lines.append(stream_url)
         total_count += 1
     
-    print(f"📊 Processed {total_count} channels in exact serial order.")
+    print(f"📊 Processed {len(channels)} channels")
     
     with open("playlist.m3u", "w", encoding="utf-8") as f:
         f.write("\n".join(lines))
@@ -89,15 +91,15 @@ def generate_playlist(channels):
     return total_count
 
 if __name__ == "__main__":
-    print("🔄 Generating serial-ordered playlist...")
+    print("🔄 Starting exact-metadata playlist generation...")
     try:
         channels = fetch_m3u_data()
         if not channels:
-            print("❌ No channels fetched")
+            print("❌ No channels fetched from M3U link")
             exit(1)
             
-        generate_playlist(channels)
-        print("✅ Playlist generated successfully")
+        total_channels = generate_playlist(channels)
+        print(f"✅ Playlist generated with {total_channels} channels successfully")
     except Exception as e:
         print(f"❌ Critical error: {e}")
         exit(1)
