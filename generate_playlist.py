@@ -1,6 +1,9 @@
-import os, json, random, string, requests, re, urllib.parse
-from datetime import datetime
-import pytz
+import random
+import string
+import re
+import urllib.parse
+import urllib.request
+from datetime import datetime, timezone, timedelta
 
 # --- CONFIG ---
 DATA_URL = "https://raw.githubusercontent.com/ahmedstore75/Iptvbdlive/refs/heads/main/mixiptvchannel.m3u"
@@ -9,21 +12,18 @@ HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 }
 
-# --- 1️⃣ Generate new 8-char short token ---
+# --- 1️⃣ Generate new 8-char short token (In-Memory) ---
 def generate_token():
-    token = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
-    timestamp = int(datetime.now().timestamp())
-    with open("token.json", "w") as f:
-        json.dump({"token": token, "generated_at": timestamp}, f, indent=2)
-    return token
+    return ''.join(random.choices(string.ascii_letters + string.digits, k=8))
 
 # --- 2️⃣ Download and Parse M3U Data ---
 def fetch_m3u_data():
     try:
-        res = requests.get(DATA_URL, headers=HEADERS, timeout=15)
-        res.raise_for_status()
-        lines = res.text.splitlines()
+        req = urllib.request.Request(DATA_URL, headers=HEADERS)
+        with urllib.request.urlopen(req, timeout=15) as response:
+            content = response.read().decode('utf-8')
         
+        lines = content.splitlines()
         channels = []
         current_extinf = ""
         
@@ -53,12 +53,13 @@ def get_channel_slug(extinf, index):
         clean_name = re.sub(r'[^\w\s\u0980-\u09FF-]', '', name)
         slug = re.sub(r'\s+', '_', clean_name.strip())
         return slug if slug else f"ch_{index}"
-    except:
+    except Exception:
         return f"ch_{index}"
 
 # --- 3️⃣ Generate playlist ---
 def generate_playlist(channels, token):
-    bd_tz = pytz.timezone('Asia/Dhaka')
+    # বাংলাদেশ সময় (UTC+6)
+    bd_tz = timezone(timedelta(hours=6))
     bd_time = datetime.now(bd_tz).strftime('%Y-%m-%d %H:%M:%S')
     
     total_count = 0
@@ -104,7 +105,7 @@ if __name__ == "__main__":
     
     try:
         new_token = generate_token()
-        print(f"✅ Short token generated: {new_token}")
+        print(f"✅ Generated token: {new_token}")
         
         channels = fetch_m3u_data()
         
@@ -117,7 +118,7 @@ if __name__ == "__main__":
         total_channels = generate_playlist(channels, new_token)
         
         print(f"✅ Playlist generated with {total_channels} channels")
-        print("🎯 Token & playlist updated successfully")
+        print("🎯 Playlist updated successfully")
         
     except Exception as e:
         print(f"❌ Critical error: {e}")
