@@ -1,5 +1,3 @@
-import random
-import string
 import re
 import urllib.parse
 import urllib.request
@@ -12,11 +10,7 @@ HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 }
 
-# --- 1️⃣ Generate new 8-char short token (In-Memory) ---
-def generate_token():
-    return ''.join(random.choices(string.ascii_letters + string.digits, k=8))
-
-# --- 2️⃣ Download and Parse M3U Data ---
+# --- 1️⃣ Download and Parse M3U Data ---
 def fetch_m3u_data():
     try:
         req = urllib.request.Request(DATA_URL, headers=HEADERS)
@@ -56,8 +50,8 @@ def get_channel_slug(extinf, index):
     except Exception:
         return f"ch_{index}"
 
-# --- 3️⃣ Generate playlist ---
-def generate_playlist(channels, token):
+# --- 2️⃣ Generate playlist ---
+def generate_playlist(channels):
     # বাংলাদেশ সময় (UTC+6)
     bd_tz = timezone(timedelta(hours=6))
     bd_time = datetime.now(bd_tz).strftime('%Y-%m-%d %H:%M:%S')
@@ -84,9 +78,9 @@ def generate_playlist(channels, token):
             skipped_channels += 1
             continue
             
-        # চ্যানেলের নাম + .m3u8 যুক্ত করে লিংক তৈরি
+        # টোকেন ছাড়া কেবল আইডি দিয়ে লিংক তৈরি
         ch_slug = get_channel_slug(extinf, idx)
-        stream_url = f"{PHP_PROXY}?id={urllib.parse.quote(ch_slug)}.m3u8&token={token}"
+        stream_url = f"{PHP_PROXY}?id={urllib.parse.quote(ch_slug)}.m3u8"
         
         lines.append(extinf)
         lines.append(stream_url)
@@ -104,9 +98,6 @@ if __name__ == "__main__":
     print("🔄 Starting playlist generation...")
     
     try:
-        new_token = generate_token()
-        print(f"✅ Generated token: {new_token}")
-        
         channels = fetch_m3u_data()
         
         if not channels:
@@ -115,10 +106,10 @@ if __name__ == "__main__":
             
         print(f"📊 Parsed {len(channels)} channels from M3U")
         
-        total_channels = generate_playlist(channels, new_token)
+        total_channels = generate_playlist(channels)
         
         print(f"✅ Playlist generated with {total_channels} channels")
-        print("🎯 Playlist updated successfully")
+        print("🎯 Playlist updated successfully without tokens")
         
     except Exception as e:
         print(f"❌ Critical error: {e}")
