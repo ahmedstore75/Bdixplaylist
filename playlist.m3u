@@ -1,5 +1,5 @@
 #EXTM3U
-# ⏰ Updated: 2026-09-21 00:06:30
+# ⏰ Updated: 2026-09-21 03:17:14
 #=================================
 # 📺 Live IPTV Playlist
 # 🖥️ Developed by: Ahammad Ali
@@ -9,6 +9,7 @@
 #=================================
 #EXTINF:-1 tvg-name="Live Cricket" tvg-logo="https://i.ibb.co.com/rMBV1xX/images.jpg",Live Cricket
 https://iptvlive.ahmed-bd-org.workers.dev/live-cricket-1/index.m3u8
+#https://iptvlive-beta.vercel.app/asports/index.m3u8
 #EXTINF:-1 tvg-id="Zee Bangla Cinema" tvg-name="Zee Bangla Cinema" tvg-logo="https://otapp.store/uploads/tv_image/sm/zee-bangla-cinema.png" group-title="Bangla",Zee Bangla Cinema
 https://iptvlive.ahmed-bd-org.workers.dev/zee-bangla-cinema-1/index.m3u8
 #EXTINF:-1 tvg-id="97" tvg-name="Jamuna TV" tvg-logo="https://tstatic.akash-go.com/cms-ui/images/custom-content/1735560213832.png" group-title="News",Jamuna TV
