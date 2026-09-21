@@ -1,5 +1,5 @@
 #EXTM3U
-# ⏰ Updated: 2026-09-21 22:52:21
+# ⏰ Updated: 2026-09-22 02:52:40
 #=================================
 # 📺 Live IPTV Playlist
 # 🖥️ Developed by: Ahammad Ali
@@ -42,9 +42,10 @@ https://iptvlive.ahmed-bd-org.workers.dev/deepto-tv-hd-1/index.m3u8
 https://iptvlive.ahmed-bd-org.workers.dev/channel-9-hd-1/index.m3u8
 #EXTINF:-1 tvg-id="132" tvg-name="Channel I HD" tvg-logo="https://tstatic.akash-go.com/cms-ui/images/custom-content/1740567626692.png" group-title="Entertainment",Channel I HD
 https://iptvlive.ahmed-bd-org.workers.dev/channel-i-hd-1/index.m3u8
-#EXTINF:-1 tvg-id="191" tvg-name="Star News" tvg-logo="https://tstatic.akash-go.com/cms-ui/images/custom-content/1770189826301.png" group-title="News",Star Newshttp://app24.jagobd.com.bd/c3VydmVyX8RpbEU9Mi8xNy8yMFDEEHGcfRgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcEdsEfeDeKiNkVN3PTOmdFseWRtaW51aiPhnPTI2/starnewsbd.stream/tracks-v1a1/mono.m3u8
+#EXTINF:-1 tvg-id="191" tvg-name="Star News" tvg-logo="https://tstatic.akash-go.com/cms-ui/images/custom-content/1770189826301.png" group-title="News",Star News
+https://iptvlive.ahmed-bd-org.workers.dev/star-news-1/index.m3u8
 #EXTINF:-1 tvg-id="240" tvg-name="BTV Shangshad" tvg-logo="https://tstatic.akash-go.com/cms-ui/images/custom-content/1781166550297.png" group-title="News",BTV Shangshad
-https://iptvlive.ahmed-bd-org.workers.dev/star-newshttpapp24jagobdcombdc3vydmvyx8rpbeu9mi8xny8ymfdeehgcfrgzq6ntagdeoaefzbf92ywxizto0u0ezn1izmyfvcedsefedekinkvn3ptomdfsewrtaw51aiphnpti2starnewsbdstreamtracks-v1a1monom3u8-1/index.m3u8
+https://iptvlive.ahmed-bd-org.workers.dev/btv-shangshad-1/index.m3u8
 #EXTINF:-4 tvg-logo="https://dl.dropbox.com/s/leielj83em5kg7h/somoy_news.png" group-title="BANGLA",SOMOY TV
 https://iptvlive.ahmed-bd-org.workers.dev/somoy-tv-1/index.m3u8
 #EXTINF:-1 tvg-id="duronto-tv" tvg-name="DURONTO TV" tvg-logo="https://s3.aynaott.com/storage/1d3d06e02fc9ba45a990b65aebd04ebc" group-title="Bangla", DURONTO TV
@@ -145,7 +146,7 @@ https://iptvlive.ahmed-bd-org.workers.dev/jamuna-1/index.m3u8
 #EXTINF:-1 group-title="Bangladeshi" tvg-logo="https://i.postimg.cc/Zqgx8hm1/20260430-184013.png",Channel 1
 https://iptvlive.ahmed-bd-org.workers.dev/channel-1-2/index.m3u8
 #EXTINF:-1 group-title="Bangladeshi" tvg-logo="https://static.wikia.nocookie.net/etv-gspn-bangla/images/4/45/Star_News_Bangladesh.png",Star News
-https://iptvlive.ahmed-bd-org.workers.dev/star-news-1/index.m3u8
+https://iptvlive.ahmed-bd-org.workers.dev/star-news-2/index.m3u8
 #EXTINF:-1 group-title="Bangladeshi" tvg-logo="https://i.postimg.cc/0QRnM89n/20240825-071012.png",Rajdhani
 https://iptvlive.ahmed-bd-org.workers.dev/rajdhani-1/index.m3u8
 #EXTINF:-1 group-title="Bangladeshi" tvg-logo="https://i.postimg.cc/dQyBRGZR/eptv-large-1784915389231-9f42f1b48d424c8c.webp",EP TV
