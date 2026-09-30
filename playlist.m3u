@@ -1,5 +1,5 @@
 #EXTM3U
-# ⏰ Updated: 2026-09-30 02:32:33
+# ⏰ Updated: 2026-09-30 06:09:22
 #=================================
 # 📺 Live IPTV Playlist
 # 🖥️ Developed by: Ahammad Ali
@@ -352,14 +352,32 @@ https://iptvlive.ahmed-bd-org.workers.dev/sangeet-bhojpuri-1/index.m3u8
 https://iptvlive.ahmed-bd-org.workers.dev/t-sports-hd-1/index.m3u8
 #EXTINF:-1 group-title="Sports" tvg-logo="https://i.postimg.cc/rFKBNjwP/Ptvsportslogo2023.webp",PTV Sports
 https://iptvlive.ahmed-bd-org.workers.dev/ptv-sports-1/index.m3u8
+#EXTINF:-1 group-title="Sports" tvg-logo="https://i.supaimg.com/0dc91d95-6d6b-41a8-a93f-88628861dd2f/6daeb914-116d-4d8d-aa7e-e1dc3a3ab429.png",Tapmad 1
+https://iptvlive.ahmed-bd-org.workers.dev/tapmad-1-1/index.m3u8
+#EXTINF:-1 group-title="Sports" tvg-logo="https://i.supaimg.com/0dc91d95-6d6b-41a8-a93f-88628861dd2f/6daeb914-116d-4d8d-aa7e-e1dc3a3ab429.png",Tapmad 2
+https://iptvlive.ahmed-bd-org.workers.dev/tapmad-2-1/index.m3u8
+#EXTINF:-1 group-title="Sports" tvg-logo="https://i.supaimg.com/0dc91d95-6d6b-41a8-a93f-88628861dd2f/6daeb914-116d-4d8d-aa7e-e1dc3a3ab429.png",Tapmad 3
+https://iptvlive.ahmed-bd-org.workers.dev/tapmad-3-1/index.m3u8
+#EXTINF:-1 group-title="Sports" tvg-logo="https://i.supaimg.com/0dc91d95-6d6b-41a8-a93f-88628861dd2f/6daeb914-116d-4d8d-aa7e-e1dc3a3ab429.png",Tapmad 4
+https://iptvlive.ahmed-bd-org.workers.dev/tapmad-4-1/index.m3u8
+#EXTINF:-1 group-title="Sports" tvg-logo="https://i.supaimg.com/0dc91d95-6d6b-41a8-a93f-88628861dd2f/6daeb914-116d-4d8d-aa7e-e1dc3a3ab429.png",Tapmad 5
+https://iptvlive.ahmed-bd-org.workers.dev/tapmad-5-1/index.m3u8
+#EXTINF:-1 group-title="Sports" tvg-logo="https://i.supaimg.com/0dc91d95-6d6b-41a8-a93f-88628861dd2f/6daeb914-116d-4d8d-aa7e-e1dc3a3ab429.png",Tapmad 6
+https://iptvlive.ahmed-bd-org.workers.dev/tapmad-6-1/index.m3u8
+#EXTINF:-1 group-title="Sports" tvg-logo="https://i.supaimg.com/0dc91d95-6d6b-41a8-a93f-88628861dd2f/6daeb914-116d-4d8d-aa7e-e1dc3a3ab429.png",Tapmad 7
+https://iptvlive.ahmed-bd-org.workers.dev/tapmad-7-1/index.m3u8
+#EXTINF:-1 group-title="Sports" tvg-logo="https://i.supaimg.com/0dc91d95-6d6b-41a8-a93f-88628861dd2f/6daeb914-116d-4d8d-aa7e-e1dc3a3ab429.png",Tapmad 8
+https://iptvlive.ahmed-bd-org.workers.dev/tapmad-8-1/index.m3u8
+#EXTINF:-1 group-title="Sports" tvg-logo="https://i.supaimg.com/0dc91d95-6d6b-41a8-a93f-88628861dd2f/6daeb914-116d-4d8d-aa7e-e1dc3a3ab429.png",Tapmad 9
+https://iptvlive.ahmed-bd-org.workers.dev/tapmad-9-1/index.m3u8
+#EXTINF:-1 group-title="Sports" tvg-logo="https://i.supaimg.com/0dc91d95-6d6b-41a8-a93f-88628861dd2f/6daeb914-116d-4d8d-aa7e-e1dc3a3ab429.png",Tapmad 10
+https://iptvlive.ahmed-bd-org.workers.dev/tapmad-10-1/index.m3u8
 #EXTINF:-1 group-title="Sports" tvg-logo="https://i.postimg.cc/0yzwt46Q/20241126-220214.png",Ten Cricket
 https://iptvlive.ahmed-bd-org.workers.dev/ten-cricket-1/index.m3u8
 #EXTINF:-1 group-title="Sports" tvg-logo="https://i.postimg.cc/HntSg3xw/20240823_024624.png",Willow Sports
 https://iptvlive.ahmed-bd-org.workers.dev/willow-sports-1/index.m3u8
 #EXTINF:-1 group-title="Sports" tvg-logo="https://i.postimg.cc/HntSg3xw/20240823_024624.png",Willow Sports 2
 https://iptvlive.ahmed-bd-org.workers.dev/willow-sports-2-1/index.m3u8
-#EXTINF:-1 group-title="Sports" tvg-logo="https://i.postimg.cc/XNF8KVSb/o-T5CAvd.png",TUDN
-https://iptvlive.ahmed-bd-org.workers.dev/tudn-1/index.m3u8
 #EXTINF:-1 group-title="Sports" tvg-logo="https://i.postimg.cc/DzDHjCJm/20240823_024249.png",Star Sports 1
 https://iptvlive.ahmed-bd-org.workers.dev/star-sports-1-1/index.m3u8
 #EXTINF:-1 group-title="Sports" tvg-logo="https://i.postimg.cc/zBgM9nK7/20240823_024306.png",Star Sports 2
@@ -378,8 +396,6 @@ https://iptvlive.ahmed-bd-org.workers.dev/sony-ten-5-1/index.m3u8
 https://iptvlive.ahmed-bd-org.workers.dev/bein-sports-1/index.m3u8
 #EXTINF:-1 group-title="Sports" tvg-logo="https://i.postimg.cc/441hHtgZ/20250120_193746.png",Bein Sports 1
 https://iptvlive.ahmed-bd-org.workers.dev/bein-sports-1-1/index.m3u8
-#EXTINF:-1 group-title="Sports" tvg-logo="https://i.imgur.com/jVBfQNj.png",Mundial
-https://iptvlive.ahmed-bd-org.workers.dev/mundial-1/index.m3u8
 # ==========================================
 # DOCUMENTARY
 # ==========================================
@@ -413,10 +429,6 @@ https://iptvlive.ahmed-bd-org.workers.dev/india-today-1/index.m3u8
 https://iptvlive.ahmed-bd-org.workers.dev/oan-1/index.m3u8
 #EXTINF:-1 tvg-name="Iran Press" tvg-logo="https://s3.aynaott.com/storage/201491b7327fffb27d78f800dd9f42d2" group-title="News",Iran Press
 https://iptvlive.ahmed-bd-org.workers.dev/iran-press-1/index.m3u8
-#EXTINF:-1 tvg-name="T Sports HD" tvg-logo="https://s3.aynaott.com/storage/dbc585f70a60b9855b6e13a8ce4cb6f4" group-title="Sports",T Sports HD
-https://iptvlive.ahmed-bd-org.workers.dev/t-sports-hd-2/index.m3u8
-#EXTINF:-1 tvg-name="PTV Sports" tvg-logo="https://s3.aynaott.com/storage/9d9d7cbfba5a8ceea648bbd963ad1014" group-title="Sports",PTV Sports
-https://iptvlive.ahmed-bd-org.workers.dev/ptv-sports-2/index.m3u8
 #EXTINF:-1 tvg-id="tsn_1" tvg-name="TSN 1" tvg-logo="https://web.aynaott.com/storage/019dd92f-107c-7056-9e79-e5233f6e51d9/uploads/images/2026-07-20/images_d165c628a0db9286da3914ca916a4971_playmist_tsn_1400x400.jpg",TSN 1
 https://iptvlive.ahmed-bd-org.workers.dev/tsn-1-1/index.m3u8
 #EXTINF:-1 tvg-id="tsn_2" tvg-name="TSN 2" tvg-logo="https://web.aynaott.com/storage/019dd92f-107c-7056-9e79-e5233f6e51d9/uploads/images/2026-07-02/images_c92bf4f46958e65be6cc370e3fc1f0dd_playmist_tsn_2_400x400.jpg",TSN 2
