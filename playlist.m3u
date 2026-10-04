@@ -1,5 +1,5 @@
 #EXTM3U
-# ⏰ Updated: 2026-10-04 18:00:09
+# ⏰ Updated: 2026-10-04 23:21:01
 #=================================
 # 📺 Live IPTV Playlist
 # 🖥️ Developed by: Ahammad Ali
@@ -20,7 +20,6 @@ https://iptvlive.ahmed-bd-org.workers.dev/bangla-vision-1/index.m3u8
 #EXTINF:-1 tvg-id="99" tvg-name="NTV" tvg-logo="https://tstatic.akash-go.com/cms-ui/images/custom-content/1735560841094.png" group-title="Entertainment",NTV
 https://iptvlive.ahmed-bd-org.workers.dev/ntv-1/index.m3u8
 #EXTINF:-1 tvg-id="299" tvg-name="Channel 1" tvg-logo="https://tstatic.akash-go.com/cms-ui/images/custom-content/1781163068414.png" group-title="News",Channel 1
-#https://akash.sm-monirul.top/channel_1.m3u8
 https://iptvlive.ahmed-bd-org.workers.dev/channel-1-1/index.m3u8
 #EXTINF:-1 tvg-id="229" tvg-name="Maasranga TV" tvg-logo="https://tstatic.akash-go.com/cms-ui/images/custom-content/1773680325498.png" group-title="Entertainment",Maasranga TV
 https://iptvlive.ahmed-bd-org.workers.dev/maasranga-tv-1/index.m3u8
