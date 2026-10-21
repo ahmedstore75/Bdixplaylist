@@ -1,5 +1,5 @@
 #EXTM3U
-# ⏰ Updated: 2026-10-21 15:15:52
+# ⏰ Updated: 2026-10-21 20:56:51
 #=================================
 # 📺 Live IPTV Playlist
 # 🖥️ Developed by: Ahammad Ali
@@ -189,8 +189,8 @@ https://iptvlive.ahmed-bd-org.workers.dev/asian-1/index.m3u8
 https://iptvlive.ahmed-bd-org.workers.dev/movie-bangla-2/index.m3u8
 #EXTINF:-1 group-title="Bangladeshi" tvg-id="82" tvg-logo="https://i.postimg.cc/9fq1Q4Hz/20240825_070144.png",Me Tv
 https://iptvlive.ahmed-bd-org.workers.dev/me-tv-2/index.m3u8
-#EXTINF:-1 group-title="Bangladeshi" tvg-logo="https://asset.bioscopelive.com/uploads/images/2025/08/11/thumbnails_58ebcef1efcc65837557de15952d2643_goplay_srk_tv_landscape.jpg",SRK
-https://iptvlive.ahmed-bd-org.workers.dev/srk-1/index.m3u8
+#EXTINF:-1 group-title="Bangladeshi" tvg-logo="https://asset.bioscopelive.com/uploads/images/2025/08/11/thumbnails_58ebcef1efcc65837557de15952d2643_goplay_srk_tv_landscape.jpg",SRK TV
+https://iptvlive.ahmed-bd-org.workers.dev/srk-tv-1/index.m3u8
 # ==========================================
 # ISLAMIC CHANNELS
 # ==========================================
