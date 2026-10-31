@@ -1,5 +1,5 @@
 #EXTM3U
-# ⏰ Updated: 2026-10-31 12:47:29
+# ⏰ Updated: 2026-10-31 19:27:10
 #=================================
 # 📺 Live IPTV Playlist
 # 🖥️ Developed by: Ahammad Ali
@@ -342,6 +342,8 @@ https://iptvlive.ahmed-bd-org.workers.dev/yrf-music-1/index.m3u8
 https://iptvlive.ahmed-bd-org.workers.dev/hindi-hits-hd-1/index.m3u8
 #EXTINF:-1 group-title="Music" tvg-logo="https://i.postimg.cc/d1pkfnGy/s143757-ld-h15-aa.png",Sangeet Bhojpuri
 https://iptvlive.ahmed-bd-org.workers.dev/sangeet-bhojpuri-1/index.m3u8
+#EXTINF:-1 group-title="Music" tvg-logo="https://i.postimg.cc/d1pkfnGy/s143757-ld-h15-aa.png",Sangeet Bhojpuri
+https://iptvlive.ahmed-bd-org.workers.dev/sangeet-bhojpuri-2/index.m3u8
 # ==========================================
 # SPORTS CHANNELS
 # ==========================================
