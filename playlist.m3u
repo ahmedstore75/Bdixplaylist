@@ -1,5 +1,5 @@
 #EXTM3U
-# ⏰ Updated: 2026-11-24 23:13:37
+# ⏰ Updated: 2026-11-25 08:01:28
 #=================================
 # 📺 Live IPTV Playlist
 # 🖥️ Developed by: Ahammad Ali
@@ -395,6 +395,16 @@ https://iptvlive.ahmed-bd-org.workers.dev/sony-ten-1-1/index.m3u8
 https://iptvlive.ahmed-bd-org.workers.dev/sony-ten-2-1/index.m3u8
 #EXTINF:-1 group-title="Sports" tvg-logo="https://i.postimg.cc/W4tx7R4Q/20240823_024232.png",Sony Ten 5
 https://iptvlive.ahmed-bd-org.workers.dev/sony-ten-5-1/index.m3u8
+#EXTINF:-1 tvg-id="26" tvg-name="FOX SPORTS CRICKET" tvg-logo="https://i.postimg.cc/XvktmmZY/fox-cricket.png" group-title="Sports",FOX SPORTS CRICKET
+https://iptvlive.ahmed-bd-org.workers.dev/fox-sports-cricket-1/index.m3u8
+#EXTINF:-1 tvg-id="25" tvg-name="SKY SPORTS CRICKET" tvg-logo="https://i.postimg.cc/SRvBV9nN/SKY-SPORTS-CRICKET.png" group-title="Sports",SKY SPORTS CRICKET
+https://iptvlive.ahmed-bd-org.workers.dev/sky-sports-cricket-1/index.m3u8
+#EXTINF:-1 tvg-id="27" tvg-name="TNT SPORTS 1 HD" tvg-logo="https://i.postimg.cc/zvdkSTXs/TNT-Sports-1.png" group-title="Sports",TNT SPORTS 1 HD
+https://iptvlive.ahmed-bd-org.workers.dev/tnt-sports-1-hd-1/index.m3u8
+#EXTINF:-1 tvg-id="28" tvg-name="TNT SPORTS 2 HD" tvg-logo="https://i.postimg.cc/tghtvK48/TNT-Sports-2.png" group-title="Sports",TNT SPORTS 2 HD
+https://iptvlive.ahmed-bd-org.workers.dev/tnt-sports-2-hd-1/index.m3u8
+#EXTINF:-1 tvg-id="29" tvg-name="TNT SPORTS 3 HD" tvg-logo="https://i.postimg.cc/Wp9my6s3/TNT-Sports-3.png" group-title="Sports",TNT SPORTS 3 HD
+https://iptvlive.ahmed-bd-org.workers.dev/tnt-sports-3-hd-1/index.m3u8
 #EXTINF:-1 group-title="Sports" tvg-logo="https://i.postimg.cc/yNQfGnnb/RLr-MBlm.png",Bein Sports
 https://iptvlive.ahmed-bd-org.workers.dev/bein-sports-1/index.m3u8
 #EXTINF:-1 group-title="Sports" tvg-logo="https://i.postimg.cc/441hHtgZ/20250120_193746.png",Bein Sports 1
