@@ -1,5 +1,5 @@
 #EXTM3U
-# ⏰ Updated: 2026-11-27 13:30:26
+# ⏰ Updated: 2026-11-27 23:56:35
 #=================================
 # 📺 Live IPTV Playlist
 # 🖥️ Developed by: Ahammad Ali
@@ -373,6 +373,8 @@ https://iptvlive.ahmed-bd-org.workers.dev/tapmad-9-1/index.m3u8
 https://iptvlive.ahmed-bd-org.workers.dev/tapmad-10-1/index.m3u8
 #EXTINF:-1 group-title="Sports" tvg-logo="https://i.postimg.cc/0yzwt46Q/20241126-220214.png",Ten Cricket
 https://iptvlive.ahmed-bd-org.workers.dev/ten-cricket-1/index.m3u8
+#EXTINF:-1 group-title="Sports" tvg-logo="https://i.postimg.cc/0yzwt46Q/20241126-220214.png",Ten Cricket
+https://iptvlive.ahmed-bd-org.workers.dev/ten-cricket-2/index.m3u8
 #EXTINF:-1 group-title="Sports" tvg-logo="https://i.postimg.cc/HntSg3xw/20240823_024624.png",Willow Sports
 https://iptvlive.ahmed-bd-org.workers.dev/willow-sports-1/index.m3u8
 #EXTINF:-1 group-title="Sports" tvg-logo="https://i.postimg.cc/HntSg3xw/20240823_024624.png",Willow Sports 2
